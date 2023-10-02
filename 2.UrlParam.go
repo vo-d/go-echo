@@ -7,10 +7,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, world!")
-}
-
 func getCats(c echo.Context) error {
 
 	// get a specific parameter from the url
@@ -23,7 +19,7 @@ func getCats(c echo.Context) error {
 
 	// evaluate the data
 	if dataType == "string" {
-		// %s is parse string
+		// %s parse uninterpreted bytes of the string or slice
 		return c.String(http.StatusOK, fmt.Sprintf("your cat name is %s\nand his type is: %s\n", catName, catType))
 	}
 	if dataType == "json" {
@@ -32,6 +28,8 @@ func getCats(c echo.Context) error {
 			"type": catType,
 		})
 	}
+
+	// Always need a return
 	return c.JSON(http.StatusBadRequest, map[string]string{
 		"error": "you need to lets us know if you want json or string data",
 	})
@@ -43,7 +41,6 @@ func main() {
 
 	e := echo.New()
 
-	e.GET("/", hello)
 	e.GET("/cats/:data", getCats)
 
 	e.Start(":8000")
