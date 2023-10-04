@@ -11,26 +11,29 @@ import (
 )
 
 type Cat struct {
-	Name string `json:"name"`
-	Type string `json:"type"`
+	Name string
+	Type string
 }
 
 func addCats(c echo.Context) error {
 	// initialize objects
+
 	cat := Cat{}
 
 	// read the request body and put it to b
+	// use io.ReadAll()
 	b, err := io.ReadAll(c.Request().Body)
 	if err != nil {
-		log.Printf("failed reading the request body: %s", err)
+		log.Printf("failed to read the request body: %v", err)
 		return c.String(http.StatusInternalServerError, "")
 	}
-
-	// Unmarshal() decode the request body from the json to a slice
+	// Unmarshal() decode the request body from the json to a slice, then store it to the address
+	// If &cat is not the address, it will return an error to object. If &cat is the address, it will return nil to object
 	// equivalent to JSON.parse() in ExpressJS
 	object := json.Unmarshal(b, &cat)
+	log.Print(cat)
 	if object != nil {
-		log.Printf("failed unmarshaling in addCats: %s", err)
+		log.Printf("failed to parse the request body: %v", err)
 		return c.String(http.StatusInternalServerError, "")
 	}
 
@@ -38,7 +41,7 @@ func addCats(c echo.Context) error {
 	log.Printf("this is your cat: %#v", cat)
 	c.Request().Body.Close()
 
-	return c.String(http.StatusOK, "we got your cat")
+	return c.String(http.StatusOK, "We got your cat")
 
 }
 
