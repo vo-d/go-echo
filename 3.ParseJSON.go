@@ -27,6 +27,7 @@ func addCats(c echo.Context) error {
 		log.Printf("failed to read the request body: %v", err)
 		return c.String(http.StatusInternalServerError, "")
 	}
+
 	// Unmarshal() decode the request body from the json to a slice, then store it to the address
 	// If &cat is not the address, it will return an error to object. If &cat is the address, it will return nil to object
 	// equivalent to JSON.parse() in ExpressJS
