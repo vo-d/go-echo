@@ -24,7 +24,7 @@ func main() {
 
 	// localhost:8000/admin/main
 	g.GET("/main", mainAdmin)
+ // g.GET("/main", mainAdmin, middleware.Logger())
 
 	e.Start(":8000")
-
 }
