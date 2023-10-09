@@ -22,7 +22,7 @@ func main() {
 	g := e.Group("/admin", middleware.Logger())
 	//or g.Use(middleware.Logger())
 
-	// localhost:8000/admin/main
+	// localhost:8000/admin/main gives the same result
 	g.GET("/main", mainAdmin)
 
 	e.Start(":8000")
