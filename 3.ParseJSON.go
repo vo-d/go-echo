@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"reflect"
 
 	"github.com/labstack/echo/v4"
 )
@@ -27,17 +28,16 @@ func addCats(c echo.Context) error {
 		log.Printf("failed to read the request body: %v", err)
 		return c.String(http.StatusInternalServerError, "")
 	}
+	log.Printf(reflect.TypeOf(b).String())
 
 	// Unmarshal() decode the request body from the json to a slice, then store it to the address
-	// If &cat is not the address, it will return an error to object. If &cat is the address, it will return nil to object
+	// If &cat is not the address, it will return an error to error. If &cat is the address, it will return nil to object
 	// equivalent to JSON.parse() in ExpressJS
-	object := json.Unmarshal(b, &cat)
-	log.Print(cat)
-	if object != nil {
+	error := json.Unmarshal(b, &cat)
+	if error != nil {
 		log.Printf("failed to parse the request body: %v", err)
 		return c.String(http.StatusInternalServerError, "")
 	}
-
 	// %#v parse the value in a default format
 	log.Printf("this is your cat: %#v", cat)
 	c.Request().Body.Close()

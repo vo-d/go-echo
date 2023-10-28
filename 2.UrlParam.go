@@ -1,3 +1,4 @@
+// as long as the package name is the same, every files in the folder will share the same method
 package main
 
 import (
