@@ -8,8 +8,8 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func mainAdmin(e echo.Context) error {
-	return e.String(http.StatusOK, "you're on the secret admin page")
+func mainAdmin(c echo.Context) error {
+	return c.String(http.StatusOK, "you're on the secret admin page")
 }
 
 func main() {
