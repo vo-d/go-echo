@@ -28,8 +28,6 @@ func main() {
 
 	e.Use(ServerHeader)
 
-	// group here is like the router in ExpressJs
-	// can add unlimited middleware to anything
 	g := e.Group("/admin", middleware.Logger())
 
 	g.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
@@ -39,9 +37,6 @@ func main() {
 		}
 		return false, nil
 	}))
-
-	//or g.Use(middleware.Logger())
-	// this middleware logs the server interaction
 
 	// localhost:8000/admin/main
 	g.GET("/main", mainAdmin, middleware.LoggerWithConfig(middleware.LoggerConfig{
