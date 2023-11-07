@@ -25,6 +25,7 @@ func login(c echo.Context) error {
 	username := c.QueryParam("username")
 	password := c.QueryParam("password")
 
+	// http://localhost:8000/login?username=jack&password=12345
 	// Check username and password against DB after hashing it
 	if username == "jack" && password == "12345" {
 		cookie := new(http.Cookie)
@@ -43,10 +44,13 @@ func login(c echo.Context) error {
 	return c.String(http.StatusUnauthorized, "Your username or password were incorrect")
 }
 
+// middleware to check cookie validity
 func checkCookie(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		// check cookie in req with the key  "sessionID"
 		cookie, err := c.Cookie("sessionID")
 
+		// if there is no coookie, return error string
 		if err != nil {
 			if strings.Contains(err.Error(), "named cookie not present") {
 				return c.String(http.StatusUnauthorized, "You don't have any cookies")
@@ -54,10 +58,12 @@ func checkCookie(next echo.HandlerFunc) echo.HandlerFunc {
 			log.Println(err)
 			return err
 		}
+		// if there is cookie with value "some_string", proceed to next
 		if cookie.Value == "some_string" {
 			return next(c)
 		}
 
+		// if there is cookie with value different from "some_string", return string
 		return c.String(http.StatusUnauthorized, "You don't have the right cookie")
 	}
 }
@@ -75,6 +81,7 @@ func main() {
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 
+	// everytime visit cookie group, run checkCookie
 	cookieGroup.Use(checkCookie)
 	cookieGroup.GET("/main", mainCookie)
 
